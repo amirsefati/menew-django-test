@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'estimate',
     'rest_framework',
     'user.apps.UserConfig',
+    'rest_framework.authtoken'
 ]
 
 AUTH_USER_MODEL = 'user.User'
@@ -59,6 +60,9 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,  
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
 
 ROOT_URLCONF = 'test.urls'
