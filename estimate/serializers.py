@@ -9,7 +9,8 @@ class EstimateEquipmentSerializer(serializers.ModelSerializer):
 
 class EstimateSerializer(serializers.ModelSerializer):
     equipments = EstimateEquipmentSerializer(many=True, required=False)
-    equipments_list = EstimateEquipmentSerializer(source='estimateequipment_set', many=True, required=False)
+    equipments_list = EstimateEquipmentSerializer(
+        source='estimateequipment_set', many=True, required=False, read_only=True)
 
     class Meta:
         model = Estimate
