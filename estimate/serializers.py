@@ -4,7 +4,8 @@ from .models import Estimate, EstimateEquipment
 class EstimateEquipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = EstimateEquipment
-        fields = ['id', 'equipment', 'quantity', 'price_overide', 'created_on']
+        fields = ['id', 'equipment', 'quantity',
+                  'price_override', 'created_on']
 
 class EstimateSerializer(serializers.ModelSerializer):
     equipments = EstimateEquipmentSerializer(many=True, required=False)
