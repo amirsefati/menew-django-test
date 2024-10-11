@@ -4,6 +4,7 @@ from rest_framework import status
 from .serializer import UserSerialize
 from drf_yasg.utils import swagger_auto_schema
 from .models import User
+from rest_framework import generics
 
 class UserCreateView(APIView):
 
@@ -28,3 +29,30 @@ class UserCreateView(APIView):
 
             return Response(response_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerialize
+
+
+class UserUpdateView(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerialize
+    lookup_field = 'id'
+
+    def put(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class UserDeleteView(generics.DestroyAPIView):
+    queryset = User.objects.all()
+    lookup_field = 'id'
+
+    def delete(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
