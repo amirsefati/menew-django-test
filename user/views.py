@@ -9,8 +9,6 @@ from rest_framework.permissions import IsAdminUser
 
 
 class UserCreateView(APIView):
-    permission_classes = [IsAdminUser]
-
     @swagger_auto_schema(
         request_body=UserSerialize,
         responses={201: UserSerialize(), 400: 'Bad Request'},
@@ -26,8 +24,14 @@ class UserCreateView(APIView):
             # I use stackoverflow to find this line
             extra_fields = {k: v for k, v in validated_data.items() if k not in [
                 'email', 'password']}
-            user = User.objects.create_user(
-                email=email, password=password, **extra_fields)
+            
+            superuser = validated_data.get('is_superuser')
+            if superuser is True :
+                user = User.objects.create_superuser(
+                    email=email, password=password, **extra_fields)
+            else :
+                user = User.objects.create_user(
+                    email=email, password=password, **extra_fields)
             response_serializer = UserSerialize(user)
 
             return Response(response_serializer.data, status=status.HTTP_201_CREATED)
@@ -37,7 +41,6 @@ class UserCreateView(APIView):
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerialize
-    permission_classes = [IsAdminUser]
 
 
 class UserUpdateView(generics.UpdateAPIView):
