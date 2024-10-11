@@ -28,7 +28,8 @@ class EstimateEquipment(models.Model):
     estimate = models.ForeignKey(Estimate, on_delete=models.CASCADE, blank=False, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE, blank=False)
     quantity = models.FloatField(blank=False)
-    price_override = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    price_override = models.DecimalField(
+        max_digits=8, decimal_places=2, blank=False, null=True)
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
